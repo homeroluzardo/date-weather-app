@@ -33,7 +33,7 @@ async function fetchWeather(lat, lon, cityName = "Unknown") {
 
     // Mostrar el clima con la temperatura en °C y °F
     document.getElementById("weather").textContent = 
-      `Weather in ${cityName}: ${data.weather[0].description}, ${tempCelsius}°C / ${tempFahrenheit.toFixed(1)}°F`;
+      `Weather in ${cityName}: ${data.weather[0].description}, ${tempFahrenheit.toFixed(1)}°F / ${tempCelsius}°C`;
 
     // Mostrar el icono del clima
     document.getElementById("weather-icon").src = iconUrl;
