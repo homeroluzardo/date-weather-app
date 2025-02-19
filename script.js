@@ -44,25 +44,24 @@ async function fetchWeather(lat, lon, cityName = "Unknown") {
 
 async function getLocation() {
   try {
-    const response = await fetch("https://www.geoplugin.net/json.gp");
+    const response = await fetch("https://ipinfo.io/json?token=95709616040f85"); // API_KEY ipinfo.io
     const data = await response.json();
 
-    if (!data.geoplugin_latitude || !data.geoplugin_longitude) {
+    if (!data.loc) {
       throw new Error("Location data unavailable");
     }
 
-    const lat = data.geoplugin_latitude;
-    const lon = data.geoplugin_longitude;
-    const city = data.geoplugin_city || "Unknown";
+    const [lat, lon] = data.loc.split(",");
+    const city = data.city || "Unknown";
 
     // Mostrar la ciudad obtenida
     document.getElementById("city").textContent = `City: ${city}`;
     
     fetchWeather(lat, lon, city);
   } catch (error) {
-    // Si hay un error, usar New York por defecto
-    document.getElementById("city").textContent = "City: New York";
-    fetchWeather(40.7128, -74.0060, "New York");
+    // Si hay un error, usar Washington D.C. por defecto
+    document.getElementById("city").textContent = "City: Washington D.C.";
+    fetchWeather(38.9072, -77.0369, "Washington D.C.");
   }
 }
 
