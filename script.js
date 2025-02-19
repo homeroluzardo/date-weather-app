@@ -24,7 +24,7 @@ updateClock();
 async function fetchWeather(lat, lon) {
   try {
     const response = await fetch(
-      `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=ec9e4a021a867c6c90925b09040ad853&units=metric&lang=en`
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=ec9e4a021a867c6c90925b09040ad853&units=metric&lang=en`
     );
     const data = await response.json();
 
@@ -35,7 +35,7 @@ async function fetchWeather(lat, lon) {
 
     // Obtener el código del icono del clima
     const weatherIconCode = data.weather[0].icon;
-    const iconUrl = `http://openweathermap.org/img/wn/${weatherIconCode}.png`; // URL del icono
+    const iconUrl = `https://openweathermap.org/img/wn/${weatherIconCode}.png`; // URL del icono
 
     // Mostrar el clima con la temperatura en °C y °F
     document.getElementById("weather").textContent = `Weather in ${
