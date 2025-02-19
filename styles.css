@@ -1,0 +1,25 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  background-color: #282c34;
+  color: white;
+  text-align: center;
+}
+
+#clock {
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+#date {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+#weather {
+  font-size: 1.2em;
+}
