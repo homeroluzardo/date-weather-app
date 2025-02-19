@@ -3,9 +3,7 @@ function updateClock() {
   const hours = now.getHours().toString().padStart(2, "0");
   const minutes = now.getMinutes().toString().padStart(2, "0");
   const seconds = now.getSeconds().toString().padStart(2, "0");
-  document.getElementById(
-    "clock"
-  ).textContent = `${hours}:${minutes}:${seconds}`;
+  document.getElementById("clock").textContent = `${hours}:${minutes}:${seconds}`;
 
   const dateOptions = {
     weekday: "long",
@@ -13,60 +11,58 @@ function updateClock() {
     month: "long",
     day: "numeric",
   };
-  document.getElementById("date").textContent = now.toLocaleDateString(
-    "en-US",
-    dateOptions
-  );
+  document.getElementById("date").textContent = now.toLocaleDateString("en-US", dateOptions);
 }
 setInterval(updateClock, 1000);
 updateClock();
 
-async function fetchWeather(lat, lon) {
+async function fetchWeather(lat, lon, cityName = "Unknown") {
   try {
     const response = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=ec9e4a021a867c6c90925b09040ad853&units=metric&lang=en`
     );
     const data = await response.json();
 
-    // Temperatura en Celsius
+    // Temperatura en Celsius y Fahrenheit
     const tempCelsius = data.main.temp;
-    // Conversión a Fahrenheit
-    const tempFahrenheit = (tempCelsius * 9) / 5 + 32;
+    const tempFahrenheit = (tempCelsius * 9/5) + 32;
 
-    // Obtener el código del icono del clima
+    // Obtener el icono del clima
     const weatherIconCode = data.weather[0].icon;
-    const iconUrl = `https://openweathermap.org/img/wn/${weatherIconCode}.png`; // URL del icono
+    const iconUrl = `https://openweathermap.org/img/wn/${weatherIconCode}.png`;
 
     // Mostrar el clima con la temperatura en °C y °F
-    document.getElementById("weather").textContent = `Weather in ${
-      data.name
-    }: ${data.weather[0].description}, ${tempFahrenheit.toFixed(
-      1
-    )}°F / ${tempCelsius}°C`;
+    document.getElementById("weather").textContent = 
+      `Weather in ${cityName}: ${data.weather[0].description}, ${tempCelsius}°C / ${tempFahrenheit.toFixed(1)}°F`;
 
     // Mostrar el icono del clima
     document.getElementById("weather-icon").src = iconUrl;
   } catch (error) {
-    document.getElementById("weather").textContent =
-      "Unable to fetch weather data";
+    document.getElementById("weather").textContent = "Unable to fetch weather data";
   }
 }
 
 async function getLocation() {
   try {
-    const response = await fetch("http://ip-api.com/json");
+    const response = await fetch("https://www.geoplugin.net/json.gp");
     const data = await response.json();
-    const lat = data.lat;
-    const lon = data.lon;
-    const city = data.city; // Obtener el nombre de la ciudad
 
-    // Mostrar el nombre de la ciudad
+    if (!data.geoplugin_latitude || !data.geoplugin_longitude) {
+      throw new Error("Location data unavailable");
+    }
+
+    const lat = data.geoplugin_latitude;
+    const lon = data.geoplugin_longitude;
+    const city = data.geoplugin_city || "Unknown";
+
+    // Mostrar la ciudad obtenida
     document.getElementById("city").textContent = `City: ${city}`;
-
-    fetchWeather(lat, lon);
+    
+    fetchWeather(lat, lon, city);
   } catch (error) {
-    document.getElementById("weather").textContent =
-      "Unable to fetch location data";
+    // Si hay un error, usar New York por defecto
+    document.getElementById("city").textContent = "City: New York";
+    fetchWeather(40.7128, -74.0060, "New York");
   }
 }
 
