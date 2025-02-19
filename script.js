@@ -1,9 +1,14 @@
 function updateClock() {
   const now = new Date();
-  const hours = now.getHours().toString().padStart(2, "0");
+  let hours = now.getHours();
   const minutes = now.getMinutes().toString().padStart(2, "0");
   const seconds = now.getSeconds().toString().padStart(2, "0");
-  document.getElementById("clock").textContent = `${hours}:${minutes}:${seconds}`;
+
+  // Convertir a formato 12 horas con AM/PM
+  const ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12 || 12; // Convierte 0 a 12 para formato AM/PM
+
+  document.getElementById("clock").textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
 
   const dateOptions = {
     weekday: "long",
